@@ -12,6 +12,8 @@ public class Vehicle {
     protected DateTime lastMaintenanceDate;
 
     protected ArrayList<RentalRecord> allRentalRecords = new ArrayList<RentalRecord>();
+    protected ArrayList<MaintenanceRecord> allMaintenanceRecords = new ArrayList<MaintenanceRecord>();
+
     public static final int MAX_RENTAL_RECORDS = 10;
 
 
@@ -108,9 +110,7 @@ public class Vehicle {
             this.beingRented = true;
             // creating a new rental record
             RentalRecord new_rental_record = new RentalRecord(this.id, customerId, rentDate, estReturnDate);
-            new_rental_record.setRentDate(rentDate);
             System.out.print("Vehicle " + this.id + " is now rented by customer " + customerId + ".\n");
-            new_rental_record.setEstReturnDate(estReturnDate);
             System.out.println("Expected return date " + new_rental_record.getStringEstReturnDate());
             // updating the rental record collection of the vehicle
             allRentalRecords.add(new_rental_record);
@@ -138,7 +138,6 @@ public class Vehicle {
     }
 
     public boolean performMaintenance() {
-        // TODO perform all necessary data validation to avoid any unreasonable scenario
         if (this.beingRented) {
             System.out.println("This vehicle is currently rented out.");
             return false;
@@ -161,7 +160,9 @@ public class Vehicle {
             System.out.println("This vehicle is not under maintenance.");
             return false;
         } else {
+            MaintenanceRecord new_maintenance_record = new MaintenanceRecord(this.id, completionDate);
             System.out.println("Maintenance is finished.");
+            allMaintenanceRecords.add(new_maintenance_record);
             this.lastMaintenanceDate = completionDate;
             this.beingMaintained = false;
             return true;

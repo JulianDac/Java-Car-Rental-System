@@ -10,6 +10,7 @@ public class ThriftyRentSystem {
     int rent_stat = 0;
     int return_stat = 0;
     private DateTime rent_date;
+    private DateTime maintenance_date;
     private DateTime date_returned;
     private DateTime date_maintenance_completed;
     private static final String car_4_seater = "4";
@@ -167,7 +168,6 @@ public class ThriftyRentSystem {
         String id = scanner.nextLine();
         Vehicle found_vehicle = getVehicleObjFromID(id);
         if (found_vehicle == null) {
-            // TODO
             System.out.println("Vehicle with this ID is not found");
         } else {
             System.out.print("Customer ID: ");
@@ -189,47 +189,70 @@ public class ThriftyRentSystem {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            boolean validDay = false;
-            while (!validDay) {
-                System.out.print("How many days to rent out: ");
-                int days_rented = scanner.nextInt();
-                if (found_vehicle.getID().charAt(0) == 'C') {
-                    if (days_rented <= 14) {
-                        if (rent_date.getNameOfDay().equals("Friday") || rent_date.getNameOfDay().equals("Saturday")) {
-                            if (days_rented < 3) {
-                                System.out.println("Rental period must be at least 3 days for Fri and Sat");
+            char vehicleType = found_vehicle.getID().charAt(0);
+            switch (vehicleType) {
+                case 'C':
+                    boolean validDayCar = false;
+                    while (!validDayCar) {
+                        System.out.print("How many days to rent out: ");
+                        int days_rented = scanner.nextInt();
+                        if (days_rented <= 14) {
+                            if (rent_date.getNameOfDay().equals("Friday") || rent_date.getNameOfDay().equals("Saturday")) {
+                                if (days_rented < 3) {
+                                    System.out.println("Rental period must be at least 3 days for Fri and Sat");
+                                } else {
+                                    this.days_to_rent = days_rented;
+                                    validDayCar = true;
+                                }
                             } else {
-                                validDay = true;
+                                if (days_rented < 2) {
+                                    System.out.println("Rental period must be at least 2 days");
+                                } else {
+                                    this.days_to_rent = days_rented;
+                                    validDayCar = true;
+                                }
                             }
                         } else {
-                            if (days_rented < 2) {
-                                System.out.println("Rental period must be at least 2 days");
+                            System.out.println("Rental period cannot exceed 14 days ");
+                        }
+                    }
+                    break;
+                case 'V':
+                    DateTime daysSinceLastMaintenance = new DateTime();
+                    int daysSinceLastMaintenanceInt;
+                    while (found_vehicle.getLastMaintenanceDate() != null) {
+                        daysSinceLastMaintenanceInt = daysSinceLastMaintenance.diffDays(rent_date, found_vehicle.getLastMaintenanceDate());
+                        if (daysSinceLastMaintenanceInt >= 12) {
+                            System.out.println("This Van was last maintained on " + found_vehicle.getLastMaintenanceDate().getFormattedDate() + "." + "\n"
+                                    + "It can't be rented out now and will be sent for maintenance.");
+                            found_vehicle.performMaintenance();
+                        }
+                        boolean validDayVan = false;
+                        while (!validDayVan) {
+                            System.out.print("How many days to rent out: ");
+                            int days_rented = scanner.nextInt();
+                            if (days_rented < 1) {
+                                System.out.println("Rental period is at least 1 day. This Van is now rented for 1 day.");
+                            } else if (daysSinceLastMaintenanceInt + days_rented > 12) {
+                                System.out.println("This Van was last maintained on " + found_vehicle.getLastMaintenanceDate().getFormattedDate() + "." + "\n"
+                                    + "We will allow this vehicle to be rented for only: " + (12 - daysSinceLastMaintenanceInt) + " days.");
                             } else {
-                                validDay = true;
+                                this.days_to_rent = days_rented;
+                                validDayVan = true;
                             }
                         }
-                    } else {
-                        System.out.println("Rental period cannot exceed 14 days ");
+                        break;
                     }
-                } else if (found_vehicle.getID().charAt(0) == 'V') {
-                    if (days_rented < 1) {
-                        System.out.println("Rental period is at least 1 day. This Van is now rented for 1 day.");
-                        this.days_to_rent = 1; //minimum rental period for van = 1
-                    } else {
-                        this.days_to_rent = days_rented;
-                    }
-                }
             }
-
-            // TODO other parameters
-            try {
-                found_vehicle.rent(customerId, rent_date, days_to_rent);
+            boolean isSuccessfulRent = found_vehicle.rent(customerId, rent_date, days_to_rent);
+            if (isSuccessfulRent) {
                 rent_stat++;
-            } catch (Exception e) {
+            } else {
                 System.out.println("Vehicle could not be rented");
             }
         }
     }
+
 
     public void returnVehicle() {
         Scanner scanner = new Scanner(System.in);
@@ -242,15 +265,17 @@ public class ThriftyRentSystem {
             System.out.println("Enter Return Date (dd/mm/yy): ");
             try {
                 String date_input = scanner.nextLine();
-                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yy");
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
                 Date dateA = format.parse(date_input); //Create object dateA to store user input as a Date class object
                 Calendar cal = Calendar.getInstance(); //Create object cal to obtain day/mo/year from dateA
                 cal.setTime(dateA); //setTime(Date date) is to set this calendar's time with dateA's date
                 int dateA_day = cal.get(Calendar.DAY_OF_MONTH); //Obtain day in terms of Integer
-                int dateA_month = cal.get(Calendar.MONTH); //Obtain month in terms of Integer
+                int dateA_month = cal.get(Calendar.MONTH) + 1; //Obtain month in terms of Integer
                 int dateA_year = cal.get(Calendar.YEAR); //Obtain year in terms of Integer
+                int dateA_dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); //Obtain day of week in terms of Integer
                 DateTime dateB = new DateTime(dateA_day, dateA_month, dateA_year); //Construct new DateTime object using 3 Integers
                 this.date_returned = dateB;
+                System.out.println("Return date is " + date_returned.getFormattedDate());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -270,16 +295,19 @@ public class ThriftyRentSystem {
                     System.out.println("This is a late return");
                     System.out.println("Days rented: " + daysRentedToPayForInt);
                     System.out.println("Late days: " + daysLateToPayForInt);
-                    System.out.println("Fee payable: " + rentalFeeToPay(found_vehicle.getID(), daysRentedToPayForInt));
-                    System.out.println("Late fee payable: " + lateFeeToPay(found_vehicle.getID(), daysLateToPayForInt));
+                    if (found_vehicle.getID().charAt(0) == 'C') {
+                        System.out.println("Fee payable: " + rentalFeeToPay(found_vehicle.getID(), daysRentedToPayForInt));
+                        System.out.println("Late fee payable: " + lateFeeToPay(found_vehicle.getID(), daysLateToPayForInt));
+                    } else if (found_vehicle.getID().charAt(0) == 'V') {
+                        daysLateToPayForInt = daysRentedToPayForInt + daysLateToPayForInt;
+                        System.out.println("Late fee payable: " + lateFeeToPay(found_vehicle.getID(), daysLateToPayForInt));
+                    }
+
                 } else {
                     System.out.println("Days rented: " + daysRentedToPayForInt);
                     System.out.println("Fee payable: " + rentalFeeToPay(found_vehicle.getID(), daysRentedToPayForInt));
                 }
-                //TODO LATE FEE
-
             } else {
-                // TODO
                 System.out.println("Vehicle could not be returned.");
             }
         }
@@ -321,9 +349,27 @@ public class ThriftyRentSystem {
         String id = scanner.nextLine();
         Vehicle found_vehicle = getVehicleObjFromID(id);
         if (found_vehicle == null) {
-            // TODO
-            System.out.println("Vehicle with this ID is not found");
+            System.out.println("Vehicle with this ID is not found.");
+        } else if (found_vehicle.getID().charAt(0) != 'V'){
+            System.out.println("Invalid ID. Only vans need to be maintained.");
         } else {
+            System.out.print("Enter Maintenance Date (dd/mm/yy): ");
+            try {
+                String date_input = scanner.nextLine();
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
+                Date dateA = format.parse(date_input); //Create object dateA to store user input as a Date class object
+                Calendar cal = Calendar.getInstance(); //Create object cal to obtain day/mo/year from dateA
+                cal.setTime(dateA); //setTime(Date date) is to set this calendar's time with dateA's date
+                int dateA_day = cal.get(Calendar.DAY_OF_MONTH); //Obtain day in terms of Integer
+                int dateA_month = cal.get(Calendar.MONTH) + 1; //Obtain month in terms of Integer
+                int dateA_year = cal.get(Calendar.YEAR); //Obtain year in terms of Integer
+                int dateA_dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); //Obtain day of week in terms of Integer
+                DateTime dateB = new DateTime(dateA_day, dateA_month, dateA_year); //Construct new DateTime object using 3 Integers
+                this.maintenance_date = dateB;
+                System.out.println("Maintenance date is " + maintenance_date.getFormattedDate());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             boolean isSuccessfulPerformanceMaintenance = found_vehicle.performMaintenance();
             if (isSuccessfulPerformanceMaintenance) {
                 System.out.print("Vehicle " + found_vehicle.getID() + " is now under maintenance.\n");
@@ -331,7 +377,6 @@ public class ThriftyRentSystem {
                 System.out.println("Failed to perform maintenance on vehicle " + found_vehicle.getID());
             }
         }
-
     }
 
     public void completeMaintenance() {
@@ -340,26 +385,27 @@ public class ThriftyRentSystem {
         String id = scanner.nextLine();
         Vehicle found_vehicle = getVehicleObjFromID(id);
         if (found_vehicle == null) {
-            // TODO
             System.out.println("Vehicle with this ID is not found");
+        } else if (found_vehicle.getID().charAt(0) != 'V'){
+            System.out.println("Invalid ID");
         } else {
-            // TODO input completionDate
             System.out.println("Enter Completion Date (dd/mm/yy): ");
             try {
                 String date_input = scanner.nextLine();
-                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yy");
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
                 Date dateA = format.parse(date_input); //Create object dateA to store user input as a Date class object
                 Calendar cal = Calendar.getInstance(); //Create object cal to obtain day/mo/year from dateA
                 cal.setTime(dateA); //setTime(Date date) is to set this calendar's time with dateA's date
                 int dateA_day = cal.get(Calendar.DAY_OF_MONTH); //Obtain day in terms of Integer
-                int dateA_month = cal.get(Calendar.MONTH); //Obtain month in terms of Integer
+                int dateA_month = cal.get(Calendar.MONTH) + 1; //Obtain month in terms of Integer
                 int dateA_year = cal.get(Calendar.YEAR); //Obtain year in terms of Integer
+                int dateA_dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); //Obtain day of week in terms of Integer
                 DateTime dateB = new DateTime(dateA_day, dateA_month, dateA_year); //Construct new DateTime object using 3 Integers
                 this.date_maintenance_completed = dateB;
+                System.out.println("Maintenance completion date is " + date_maintenance_completed.getFormattedDate());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
             DateTime completionDate = new DateTime();
             if (found_vehicle.completeMaintenance(date_maintenance_completed)) {
                 System.out.print("Vehicle " + found_vehicle.getID()
@@ -374,7 +420,6 @@ public class ThriftyRentSystem {
         for (Vehicle vehicle : allVehicles) {
             vehicle.printDetails();
             vehicle.printAllRentalRecordDetails();
-            // TODO details about up to 10 most recent rental records of each vehicle
         }
     }
 
