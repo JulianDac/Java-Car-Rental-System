@@ -88,11 +88,12 @@ public class RentalRecord {
         this.lateFee = lateFee;
     }
 
+    @Override
     public String toString() {
         return String.join(":", getRecordID(), getRentDate().getFormattedDate(), getStringEstReturnDate(), getStringActReturnDate());
     }
 
-    public void printDetails() {
+    public void getDetails() {
         System.out.printf("%-15s %15s %n", "Record ID: ", getRecordID());
         System.out.printf("%-15s %15s %n", "Rent Date:", getRentDate());
         System.out.printf("%-15s %15s %n", "Estimated Return Date:", getEstReturnDate());
@@ -101,20 +102,6 @@ public class RentalRecord {
             System.out.printf("%-15s %15s %n", "Rental Fee:", rentalFee);
             System.out.printf("%-15s %15s %n", "Late Fee: ", lateFee);
         }
-    }
-
-    public void updateRecord(DateTime returnDate) {
-        DateTime daysRented = new DateTime(7);
-        actReturnDate = daysRented;
-    }
-
-    public void setRentalFee (double dailyRates, double rentalDays) {
-        rentalFee = dailyRates * rentalDays;
-        System.out.println(df2.format(rentalFee));
-    }
-    public void setLateFee (double latedailyRates, double lateDays) {
-        lateFee = latedailyRates * lateDays;
-        System.out.println(df2.format(lateFee));
     }
 
 }

@@ -110,8 +110,6 @@ public class Vehicle {
             this.beingRented = true;
             // creating a new rental record
             RentalRecord new_rental_record = new RentalRecord(this.id, customerId, rentDate, estReturnDate);
-            System.out.print("Vehicle " + this.id + " is now rented by customer " + customerId + ".\n");
-            System.out.println("Expected return date " + new_rental_record.getStringEstReturnDate());
             // updating the rental record collection of the vehicle
             allRentalRecords.add(new_rental_record);
             // TODO any other operations you consider necessary
@@ -129,7 +127,6 @@ public class Vehicle {
         }
         RentalRecord latest_rental_record = allRentalRecords.get(allRentalRecords.size()-1);
         latest_rental_record.setActReturnDate(returnDate);
-        // TODO if late
         latest_rental_record.setActReturnDate(returnDate);
         latest_rental_record.setRentalFee(0.0);
         latest_rental_record.setLateFee(0.0);
@@ -152,7 +149,6 @@ public class Vehicle {
     }
 
     public boolean completeMaintenance(DateTime completionDate) {
-        // TODO perform all necessary data validation to avoid any unreasonable scenario
         if (this.beingRented) {
             System.out.println("This vehicle is currently rented out and not under maintenance.");
             return false;
@@ -205,13 +201,13 @@ public class Vehicle {
     public void printLatestRentalRecordDetails() {
         RentalRecord latestRentalRecord = this.getLatestRentalRecord();
         if (latestRentalRecord != null) {
-            latestRentalRecord.printDetails();
+            latestRentalRecord.getDetails();
         }
     }
 
     public void printAllRentalRecordDetails() {
         for (RentalRecord record : this.allRentalRecords) {
-            record.printDetails();
+            record.getDetails();
         }
     }
 
