@@ -8,7 +8,7 @@ public class Vehicle {
     protected String seats;
     protected boolean beingRented = false;
     protected boolean beingMaintained = false;
-    protected String rentedStatus;
+    protected String rentedStatus = "Available";
     protected DateTime lastMaintenanceDate;
 
     protected ArrayList<RentalRecord> allRentalRecords = new ArrayList<RentalRecord>();
@@ -93,34 +93,26 @@ public class Vehicle {
         this.lastMaintenanceDate = lastMaintenanceDate;
     }
 
-    public boolean rent(String customerId, DateTime rentDate, int numOfRentDay) {
+    public void rent(String customerId, DateTime rentDate, int numOfRentDay) throws RentException, MaintenanceException {
         if (beingRented) {
             assert !this.beingMaintained;
-            System.out.println("This vehicle is being rented by someone else.");
-            return false;
+            throw new RentException("This vehicle is being rented by someone else.");
         } else if (beingMaintained) {
-            System.out.println("This vehicle is under maintenance");
-            return false;
+            throw new MaintenanceException("This vehicle is under maintenance");
         } else {
             DateTime estReturnDate = new DateTime(rentDate, numOfRentDay);
             if (this.allRentalRecords.size() == Vehicle.MAX_RENTAL_RECORDS) {
                 this.allRentalRecords.remove(0);
             }
-            // updating the vehicle status
             this.beingRented = true;
-            // creating a new rental record
-            RentalRecord new_rental_record = new RentalRecord(this.id, customerId, rentDate, estReturnDate);
-            // updating the rental record collection of the vehicle
+            RentalRecord new_rental_record = new RentalRecord(this.id, customerId, rentDate, estReturnDate, estReturnDate, 0, 0);
             allRentalRecords.add(new_rental_record);
-            // TODO any other operations you consider necessary
-            return true;
         }
     }
 
-    public boolean returnVehicle(DateTime returnDate) {
+    public void returnVehicle(DateTime returnDate) throws ReturnException{
         if (!this.beingRented) {
-            System.out.println("This vehicle was never rented out in the first place.");
-            return false;
+            throw new ReturnException("This vehicle was never rented out in the first place.");
         } else {
             assert !this.allRentalRecords.isEmpty();
             this.beingRented = false;
@@ -128,40 +120,30 @@ public class Vehicle {
         RentalRecord latest_rental_record = allRentalRecords.get(allRentalRecords.size()-1);
         latest_rental_record.setActReturnDate(returnDate);
         latest_rental_record.setActReturnDate(returnDate);
-        latest_rental_record.setRentalFee(0.0);
-        latest_rental_record.setLateFee(0.0);
         this.beingRented = false;
-        return true;
     }
 
-    public boolean performMaintenance() {
+    public void performMaintenance() throws RentException, MaintenanceException {
         if (this.beingRented) {
-            System.out.println("This vehicle is currently rented out.");
-            return false;
+            throw new RentException("This vehicle is currently rented out.");
         } else if (this.beingMaintained) {
-            System.out.println("This vehicle is already under maintenance.");
-            return false;
+            throw new MaintenanceException("This vehicle is already under maintenance.");
         } else {
             System.out.println("We are sending this vehicle away for maintenance.");
             beingMaintained = true;
-            return true;
         }
     }
 
-    public boolean completeMaintenance(DateTime completionDate) {
+    public void completeMaintenance(DateTime completionDate) throws RentException, MaintenanceException{
         if (this.beingRented) {
-            System.out.println("This vehicle is currently rented out and not under maintenance.");
-            return false;
+            throw new RentException("This vehicle is currently rented out and not under maintenance.");
         } else if (!this.beingMaintained) {
-            System.out.println("This vehicle is not under maintenance.");
-            return false;
+            throw new MaintenanceException("This vehicle is not under maintenance.");
         } else {
             MaintenanceRecord new_maintenance_record = new MaintenanceRecord(this.id, completionDate);
-            System.out.println("Maintenance is finished.");
             allMaintenanceRecords.add(new_maintenance_record);
             this.lastMaintenanceDate = completionDate;
             this.beingMaintained = false;
-            return true;
         }
     }
 

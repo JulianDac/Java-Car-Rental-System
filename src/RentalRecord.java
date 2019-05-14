@@ -13,11 +13,14 @@ public class RentalRecord {
 
     private static DecimalFormat df2 = new DecimalFormat(".##");
 
-    public RentalRecord(String vehicleID, String customerID, DateTime rentDate, DateTime estReturnDate) {
+    public RentalRecord(String vehicleID, String customerID, DateTime rentDate, DateTime estReturnDate, DateTime actReturnDate, double rentalFee, double lateFee) {
         this.vehicleID = vehicleID;
         this.customerID = customerID;
         this.rentDate = rentDate;
         this.estReturnDate = estReturnDate;
+        this.actReturnDate = actReturnDate;
+        this.rentalFee = rentalFee;
+        this.lateFee = lateFee;
     }
 
     public String getRecordID() {

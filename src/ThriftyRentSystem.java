@@ -5,7 +5,7 @@ import java.util.*;
 import static java.lang.System.exit;
 
 public class ThriftyRentSystem {
-    ArrayList<Vehicle> allVehicles = new ArrayList<Vehicle>();
+    private ArrayList<Vehicle> allVehicles = new ArrayList<Vehicle>();
     int add_stat = 0;
     int rent_stat = 0;
     int return_stat = 0;
@@ -20,6 +20,70 @@ public class ThriftyRentSystem {
     private DateTime dateB;
 
     public void run() {
+        //Generate data for 15 vehicles
+        Vehicle alfa_romeo = new Car("C_AlfaRomeo", "2019", "Alfa Romeo", "Spider", "4");
+        Vehicle bmw = new Car("C_BMW", "2019", "BMW", "i8", "4");
+        Vehicle chrsyler = new Car("C_Chrysler", "2019", "Chrysler", "300", "4");
+        Vehicle ferrari = new Car("C_Ferrari", "2019", "Ferrari", "488 Spider", "4");
+        Vehicle honda = new Car("C_Honda", "2019", "Honda", "Accord Euro", "4");
+        Vehicle jaguar = new Car("C_Jaguar", "2019", "Jaguar", "Mark 1", "4");
+        Vehicle lamborghini = new Car("C_Lamborghini", "2019", "Lamborghini", "Aventador", "4");
+        Vehicle lotus = new Car("C_Lotus", "2019", "Lotus", "Elise", "4");
+        Vehicle mercedes = new Car("C_Mercedes", "2019", "Mercedes", "AMG GT63", "4");
+        Vehicle mustang = new Car("C_Mustang", "2019", "Mustang", "GT500 Shelby", "4");
+        Vehicle maserati = new Van("V_Maserati", "2019", "Maserati", "Alfieri", "15");
+        Vehicle opel = new Van("V_Opel", "2019", "Opel", "Corsa Sedan", "15");
+        Vehicle nissan = new Van("V_Nissan", "2019", "Nissan", "Skyline", "15");
+        Vehicle porsche = new Van("V_Porsche", "2019", "Porsche", "911", "15");
+        Vehicle tata = new Van("V_Tata", "2019", "Tata", "Harrier", "15");
+        allVehicles.add(alfa_romeo);
+        allVehicles.add(bmw);
+        allVehicles.add(chrsyler);
+        allVehicles.add(ferrari);
+        allVehicles.add(honda);
+        allVehicles.add(jaguar);
+        allVehicles.add(lamborghini);
+        allVehicles.add(lotus);
+        allVehicles.add(mercedes);
+        allVehicles.add(mustang);
+        allVehicles.add(maserati);
+        allVehicles.add(opel);
+        allVehicles.add(nissan);
+        allVehicles.add(porsche);
+        allVehicles.add(tata);
+
+        //Generate data for rental records
+        RentalRecord alfa_romeo_1 = new RentalRecord("C_AlfaRomeo", "Tyrion", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord alfa_romeo_2 = new RentalRecord("C_AlfaRomeo", "Sansa", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord bmw_1 = new RentalRecord("C_BMW", "Jon", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord bmw_2 = new RentalRecord("C_BMW", "Tywin", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord chrysler_1 = new RentalRecord("C_Chrysler", "Dani", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord chrysler_2 = new RentalRecord("C_Chrysler", "Aegon", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord ferrari_1 = new RentalRecord("C_Ferrari", "Drogo", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord ferrari_2 = new RentalRecord("C_Ferrari", "GreyWorm", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord honda_1 = new RentalRecord("C_Honda", "Jamie", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord honda_2 = new RentalRecord("C_Honda", "Cercei", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord jaguar_1 = new RentalRecord("C_Jaguar", "Robert", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord jaguar_2 = new RentalRecord("C_Jaguar", "Ned", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord lamborghini_1 = new RentalRecord("C_Lamborghini", "Catherine", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord lamborghini_2 = new RentalRecord("C_Lamborghini", "Theon", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord lotus_1 = new RentalRecord("C_Lotus", "Bran", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord lotus_2 = new RentalRecord("C_Lotus", "Arya", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord mercedes_1 = new RentalRecord("C_Mercedes", "Glegane", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord mercedes_2 = new RentalRecord("C_Mercedes", "Joffrey", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord mustang_1 = new RentalRecord("C_Mustang", "Davos", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord mustang_2 = new RentalRecord("C_Mustang", "Brienne", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord maserati_1 = new RentalRecord("V_Maserati", "Varis", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord maserati_2 = new RentalRecord("V_Maserati", "Finger", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord opel_1 = new RentalRecord("V_Opel", "Edd", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord opel_2 = new RentalRecord("V_Opel", "Sam", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord nissan_1 = new RentalRecord("V_Nissan", "Tormund", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord nissan_2 = new RentalRecord("V_Nissan", "Margaery", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord porsche_1 = new RentalRecord("V_Porsche", "Renly", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord porsche_2 = new RentalRecord("V_Porsche", "Olenna ", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+        RentalRecord tata_1 = new RentalRecord("V_Tata", "Melisandre", convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), convertStrToDateTime("11/11/11"), 100, 120);
+        RentalRecord tata_2 = new RentalRecord("V_Tata", "Bob", convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), convertStrToDateTime("12/12/12"), 100, 120);
+
         while (true) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("**** ThriftyRent SYSTEM MENU ****\n" +
@@ -162,7 +226,13 @@ public class ThriftyRentSystem {
             if (daysSinceLastMaintenanceInt >= 12) {
                 System.out.println("This Van was last maintained on " + found_vehicle.getLastMaintenanceDate().getFormattedDate() + "." + "\n"
                         + "It can't be rented out now and will be sent for maintenance.");
-                found_vehicle.performMaintenance();
+                try {
+                    found_vehicle.performMaintenance();
+                } catch (RentException e) {
+                    System.out.println("Tough luck. Someone else has rented it.");
+                } catch (MaintenanceException e) {
+                    System.out.println("Already is under maintenance.");
+                }
             }
             boolean validDayVan = false;
             while (!validDayVan) {
@@ -176,43 +246,6 @@ public class ThriftyRentSystem {
                 } else {
                     validDayVan = true;
                 }
-            }
-        }
-    }
-
-    private void rentVehicle() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Vehicle ID: ");
-        String id = scanner.nextLine();
-        Vehicle found_vehicle = getVehicleObjFromID(id);
-        if (found_vehicle == null) {
-            System.out.println("Vehicle with this ID is not found");
-        } else {
-            System.out.print("Customer ID: ");
-            String customerId = scanner.nextLine();
-            System.out.print("Enter Rent Date (dd/mm/yy): ");
-            String date_input = scanner.nextLine();
-            rent_date = convertStrToDateTime(date_input);
-            System.out.println("Rent date is " + rent_date.getFormattedDate());
-            System.out.print("How many days to rent out: ");
-            int days_rented = scanner.nextInt();
-            char vehicleType = found_vehicle.getID().charAt(0);
-            switch (vehicleType) {
-                case 'C':
-                    checkValidDaysRentalForCar(rent_date, days_rented);
-                    break;
-                case 'V':
-                    checkValidDaysRentalForVan(found_vehicle, rent_date, days_rented);
-                    break;
-            }
-            boolean isSuccessfulRent = found_vehicle.rent(customerId, rent_date, days_rented);
-            if (isSuccessfulRent) {
-                System.out.println("Vehicle " + id + " is now rented by customer " + customerId);
-                DateTime estReturnDate = new DateTime(rent_date, days_rented);
-                System.out.println("Expected return date " + estReturnDate.getFormattedDate());
-                rent_stat++;
-            } else {
-                System.out.println("Vehicle could not be rented");
             }
         }
     }
@@ -270,6 +303,45 @@ public class ThriftyRentSystem {
         System.out.print("Added " + vehicleToAdd.getID() + " successfully.\n\n");
     }
 
+    private void rentVehicle() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Vehicle ID: ");
+        String id = scanner.nextLine();
+        Vehicle found_vehicle = getVehicleObjFromID(id);
+        if (found_vehicle == null) {
+            System.out.println("Vehicle with this ID is not found");
+        } else {
+            System.out.print("Customer ID: ");
+            String customerId = scanner.nextLine();
+            System.out.print("Enter Rent Date (dd/mm/yy): ");
+            String date_input = scanner.nextLine();
+            rent_date = convertStrToDateTime(date_input);
+            System.out.println("Rent date is " + rent_date.getFormattedDate());
+            System.out.print("How many days to rent out: ");
+            int days_rented = scanner.nextInt();
+            char vehicleType = found_vehicle.getID().charAt(0);
+            switch (vehicleType) {
+                case 'C':
+                    checkValidDaysRentalForCar(rent_date, days_rented);
+                    break;
+                case 'V':
+                    checkValidDaysRentalForVan(found_vehicle, rent_date, days_rented);
+                    break;
+            }
+            try {
+                found_vehicle.rent(customerId, rent_date, days_rented);
+                System.out.println("Vehicle " + id + " is now rented by customer " + customerId);
+                DateTime estReturnDate = new DateTime(rent_date, days_rented);
+                System.out.println("Expected return date " + estReturnDate.getFormattedDate());
+                rent_stat++;
+            } catch (RentException e) {
+                System.out.println("Tough luck. Someone else has rented it.");
+            } catch (MaintenanceException e) {
+                System.out.println("Tough luck. It has not returned from maintenance.");
+            }
+        }
+    }
+
     private void returnVehicle() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Vehicle ID (starts with C or V): ");
@@ -277,18 +349,32 @@ public class ThriftyRentSystem {
         Vehicle found_vehicle = getVehicleObjFromID(id);
         if (found_vehicle == null) {
             System.out.println("Vehicle with this ID is not found");
+        } else if (found_vehicle.getLatestRentalRecord() == null){
+            System.out.println("No rental record found. This vehicle was never rented out.");
         } else {
             System.out.println("Enter Return Date (dd/mm/yy): ");
             String date_input = scanner.nextLine();
             date_returned = convertStrToDateTime(date_input);
-            System.out.println("Return date is " + date_returned.getFormattedDate());
-            if (found_vehicle.returnVehicle(date_returned)) {
+            try {
+                checkPositiveRentalPeriod(date_returned, found_vehicle);
+                System.out.println("Return date is " + date_returned.getFormattedDate());
+                found_vehicle.returnVehicle(date_returned);
                 return_stat++;
                 System.out.print("Vehicle " + found_vehicle.getID() + " is now returned.\n");
+                found_vehicle.getLatestRentalRecord().setActReturnDate(date_returned);
                 checkLateReturn(found_vehicle, date_returned);
-            } else {
-                System.out.println("Vehicle could not be returned.");
+            } catch (ReturnException e) {
+                System.out.println("Can't return");
             }
+        }
+    }
+
+    private void checkPositiveRentalPeriod(DateTime input, Vehicle vehicle) throws ReturnException {
+        int positiveDaysCheckInt;
+        DateTime temp_date = new DateTime();
+        positiveDaysCheckInt = temp_date.diffDays(input, vehicle.getLatestRentalRecord().getRentDate());
+        if (positiveDaysCheckInt < 0) {
+            throw new ReturnException("Oof");
         }
     }
 
@@ -306,13 +392,18 @@ public class ThriftyRentSystem {
             if (found_vehicle.getID().charAt(0) == 'C') {
                 System.out.println("Fee payable: " + rentalFeeToPay(found_vehicle.getID(), daysRentedToPayForInt));
                 System.out.println("Late fee payable: " + lateFeeToPay(found_vehicle.getID(), daysLateToPayForInt));
+                found_vehicle.getLatestRentalRecord().setRentalFee(rentalFeeToPay(found_vehicle.getID(), daysRentedToPayForInt));
+                found_vehicle.getLatestRentalRecord().setLateFee(lateFeeToPay(found_vehicle.getID(), daysLateToPayForInt));
             } else if (found_vehicle.getID().charAt(0) == 'V') {
                 daysLateToPayForInt = daysRentedToPayForInt + daysLateToPayForInt;
                 System.out.println("Late fee payable: " + lateFeeToPay(found_vehicle.getID(), daysLateToPayForInt));
+                found_vehicle.getLatestRentalRecord().setRentalFee(0);
+                found_vehicle.getLatestRentalRecord().setLateFee(lateFeeToPay(found_vehicle.getID(), daysLateToPayForInt));
             }
         } else {
             System.out.println("Days rented: " + daysRentedToPayForInt);
             System.out.println("Fee payable: " + rentalFeeToPay(found_vehicle.getID(), daysRentedToPayForInt));
+            found_vehicle.getLatestRentalRecord().setRentalFee(rentalFeeToPay(found_vehicle.getID(), daysRentedToPayForInt));
         }
     }
 
@@ -356,16 +447,24 @@ public class ThriftyRentSystem {
         } else if (found_vehicle.getID().charAt(0) != 'V'){
             System.out.println("Invalid ID. Only vans need to be maintained.");
         } else {
-            System.out.print("Enter Maintenance Date (dd/mm/yy): ");
-            String date_input = scanner.nextLine();
-            maintenance_date = convertStrToDateTime(date_input);
-            System.out.println("Maintenance date is " + maintenance_date.getFormattedDate());
-            boolean isSuccessfulPerformanceMaintenance = found_vehicle.performMaintenance();
-            if (isSuccessfulPerformanceMaintenance) {
+            try {
+                found_vehicle.performMaintenance();
+                System.out.print("Enter Maintenance Date (dd/mm/yy): ");
+                String date_input = scanner.nextLine();
+                maintenance_date = convertStrToDateTime(date_input);
+                System.out.println("Maintenance date is " + maintenance_date.getFormattedDate());
                 System.out.print("Vehicle " + found_vehicle.getID() + " is now under maintenance.\n");
-            } else {
-                System.out.println("Failed to perform maintenance on vehicle " + found_vehicle.getID());
+            } catch (RentException e) {
+                System.out.println("Being Rented");
+            } catch (MaintenanceException e) {
+                System.out.println("Already has been sent out for maintenance");
             }
+//            boolean isSuccessfulPerformanceMaintenance = found_vehicle.performMaintenance();
+//            if (isSuccessfulPerformanceMaintenance) {
+//                System.out.print("Vehicle " + found_vehicle.getID() + " is now under maintenance.\n");
+//            } else {
+//                System.out.println("Failed to perform maintenance on vehicle " + found_vehicle.getID());
+//            }
         }
     }
 
@@ -379,16 +478,17 @@ public class ThriftyRentSystem {
         } else if (found_vehicle.getID().charAt(0) != 'V'){
             System.out.println("Invalid ID");
         } else {
-            System.out.println("Enter Completion Date (dd/mm/yy): ");
-            String date_input = scanner.nextLine();
-            date_maintenance_completed = convertStrToDateTime(date_input);
-            System.out.println("Maintenance completion date is " + date_maintenance_completed.getFormattedDate());
-            DateTime completionDate = new DateTime();
-            if (found_vehicle.completeMaintenance(date_maintenance_completed)) {
-                System.out.print("Vehicle " + found_vehicle.getID()
-                                 + " has all maintenance completed and ready for rent.\n");
-            } else {
-                // TODO
+            try {
+                found_vehicle.completeMaintenance(date_maintenance_completed);
+                System.out.println("Enter Completion Date (dd/mm/yy): ");
+                String date_input = scanner.nextLine();
+                date_maintenance_completed = convertStrToDateTime(date_input);
+                System.out.println("Maintenance completion date is " + date_maintenance_completed.getFormattedDate());
+                System.out.print("Vehicle " + found_vehicle.getID() + " has all maintenance completed and ready for rent.\n");
+            } catch (RentException e) {
+                System.out.println("Being Rented");
+            } catch (MaintenanceException e) {
+                System.out.println("This vehicle is not currently under maintenance.");
             }
         }
     }
